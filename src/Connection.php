@@ -47,7 +47,7 @@ class Connection
 	 */
 	public function table($table)
 	{
-		$query = new \Query\Select($this);
+		$query = new Query\Select($this);
 
 		$query->table($table);
 
@@ -131,5 +131,3 @@ class Connection
 		return $this->pdo->lastInsertId();
 	}
 }
-
-?>
