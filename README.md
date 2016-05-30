@@ -4,7 +4,7 @@ An overnightly simple PHP-mysql query builder based on PDO
 ### Installation
 #### Composer
 ```
-composer require rosengate/overnight dev-master
+composer require offworks/overnight dev-master
 ```
 
 ### Create connection
@@ -16,28 +16,37 @@ $overnight = \Overnight\Connection::create('localhost', 'rut', 'pux', 'superdb')
 #### Simple query
 Get an array of records
 ```
-$users = $overnight->query('user')
+$users = $overnight->table('user')
         ->where('created_at > ?', array(date('Y-m-d H:i:s'))
         ->execute()->all();
 ```
-Get an associated key value record
+Get an associated key value single (first) record
 ```
-$user = $overnight->query('user')
+$user = $overnight->from('user')
         ->select('name, email, birthdate')
         ->where('user_id = ?', array($userId))
         ->execute()->first();
 ```
+*p/s : from() is an alias of table()*
 
 #### Joining
+Inner Join
 ```
-$books = $overnight->query('book')
+$books = $overnight->from('book')
          ->innerJoin('author', 'author.author_id = book.author_id')
          ->execute()->all();
 ```
+Left Join
+```
+$users = $overnight->from('user')
+         ->leftJoin('membership', 'membership.user_id = user.user_id')
+         ->execute()->all();
+```
+
 
 #### Ordering
 ```
-$students = $overnight->query('student')
+$students = $overnight->from('student')
             ->where('is_alive = ?', array(1))
             ->orderBy('last_seen DESC')
             ->execute()->all();
@@ -45,7 +54,7 @@ $students = $overnight->query('student')
 
 #### Get Raw Sql
 ```
-$query = $overnight->query('news')
+$query = $overnight->from('news')
         ->innerJoin('editor', 'news.editor_id = editor.editor_id')
         ->where('DATE(published_at) = ?', array(date('Y-m-d H:i:s')))
         ->orderBy('published_at DESC')
@@ -59,6 +68,12 @@ $overnight->insert('user', array(
     'like' => 'Foo cake',
     'birthdate' => '1977-05-09'
   ))->execute();
+```
+or
+```
+#### Last insert id
+```
+$userId = $overnight->lastInsertId();
 ```
 
 ### Updating
