@@ -1,5 +1,5 @@
 # Overnight
-An overnightly simple PHP-mysql query builder based on PDO
+An overnightly simple PHP-mysql query builder based on PDO.
 
 ### Installation
 #### Composer
@@ -69,8 +69,6 @@ $overnight->insert('user', array(
     'birthdate' => '1977-05-09'
   ))->execute();
 ```
-or
-```
 #### Last insert id
 ```
 $userId = $overnight->lastInsertId();
@@ -89,6 +87,3 @@ $overnight->delete('author')
           ->where('author_id = ?', array($authorId))
           ->execute();
 ```
-
-## Notes
-There're several codes left behind.. was trying to build an active record orm, but too cumbersome to continue. So, i am going remove those and just focus this repo on query building.
