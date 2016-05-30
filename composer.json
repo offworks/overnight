@@ -1,0 +1,17 @@
+{
+	"name": "offworks/overnight",
+	"description": "Yet another simple pdo based php-mysql query builder",
+	"license": "MIT",
+	"keywords": ["query builder", "PDO", "mysql", "php-mysql"],
+	"authors": [{
+		"name": "Ahmad Rahimie Ahmad Zailani",
+		"email": "newrehmi@gmail.com",
+		"role": "lead"
+		}],
+	"support": {
+		"issues": "https://github.com/offworks/overnight/issues"
+	},
+	"autoload": {
+        "psr-4": {"Overnight\\": "src"}
+    }
+}
