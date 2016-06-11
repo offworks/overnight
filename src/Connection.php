@@ -3,14 +3,40 @@ namespace Overnight;
 
 class Connection
 {
-	public function __construct(\Pdo $pdo)
+	/**
+	 * PDO Instance
+	 * @var \PDO pdo
+	 */
+	protected $pdo;
+
+	/**
+	 * Overrideable classes
+	 * @var array classes
+	 */
+	protected $classes = array(
+		'select' => '\Overnight\Query\Select',
+		'update' => '\Overnight\Query\Update',
+		'insert' => '\Overnight\Query\Insert',
+		'delete' => '\Overnight\Query\Delete',
+		'result' => '\Overnight\Query\Result'
+	);
+
+	public function __construct(\Pdo $pdo, $classes = array())
 	{
 		$this->pdo = $pdo;
+
+		foreach($classes as $type => $class)
+			$this->classes[$type] = $class;
 	}
 
-	public static function create($host, $user, $pass, $db)
+	public function setPdoAttribute($attr, $value)
 	{
-		$connection = new static(new \Pdo('mysql:host='.$host.';dbname='.$db, $user, $pass));
+		$this->pdo->setAttribute($attr, $value);
+	}
+
+	public static function create($host, $user, $pass, $db, array $classes = array())
+	{
+		$connection = new static(new \Pdo('mysql:host='.$host.';dbname='.$db, $user, $pass), $classes);
 
 		return $connection;
 	}
@@ -24,13 +50,20 @@ class Connection
 		return $this->pdo;
 	}
 
+	protected function createObject($type)
+	{
+		return $this->classes[$type];
+	}
+
 	/**
 	 * Create select query
 	 * @return \Overnight\Query\Select
 	 */
 	public function select($columns = '*', $table = null)
 	{
-		$query = new Query\Select($this);
+		$class = $this->classes['select'];
+
+		$query = new $class($this);
 
 		$query->select($columns);
 
@@ -47,7 +80,9 @@ class Connection
 	 */
 	public function table($table)
 	{
-		$query = new Query\Select($this);
+		$class = $this->classes['select'];
+
+		$query = new $class($this);
 
 		$query->table($table);
 
@@ -69,7 +104,9 @@ class Connection
 	 */
 	public function insert($table = null, array $data = array())
 	{
-		$insert = new Query\Insert($this);
+		$class = $this->classes['insert'];
+
+		$insert = new $class($this);
 
 		if($table)
 			$insert->into($table);
@@ -86,7 +123,9 @@ class Connection
 	 */
 	public function update($table = null)
 	{
-		$update = new Query\Update($this);
+		$class = $this->classes['update'];
+
+		$update = new $class($this);
 
 		if($table)
 			$update->table($table);
@@ -100,7 +139,9 @@ class Connection
 	 */
 	public function delete($table = null)
 	{
-		$delete = new Query\Delete($this);
+		$class = $this->classes['delete'];
+
+		$delete = new $class($this);
 
 		if($table)
 			$delete->table($table);
@@ -108,12 +149,7 @@ class Connection
 		return $delete;
 	}
 
-	protected function createResult($connection, $statement)
-	{
-		return new Result($connection, $statement);
-	}
-
-	public function execute($sql, array $values = array(), array $params = array(), $type = 'select')
+	public function execute($sql, array $values = array(), array $params = array())
 	{
 		$statement = $this->pdo->prepare($sql);
 
@@ -130,7 +166,9 @@ class Connection
 			throw new \Exception($error[2]);
 		}
 
-		return new Query\Result($this, $statement);
+		$class = $this->classes['result'];
+
+		return new $class($this, $statement);
 	}
 
 	/**

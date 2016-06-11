@@ -10,28 +10,14 @@ class Delete extends Base
 		$this->data = $data;
 	}
 
-	public function getRawSql()
+	public function prepareSql($bind = true)
 	{
 		$table = implode(', ', $this->tables);
 		
-		$wheres = count($this->wheres) > 0 ? 'WHERE '.implode('', $this->wheres) : '';
+		$wheres = count($this->wheres) > 0 ? 'WHERE  '.implode('', $this->prepareWhere($bind)) : '';
 
 		$sql = 'DELETE FROM '.$table.' '.$wheres;
 
 		return $sql;
-	}
-
-	public function execute()
-	{
-		try
-		{
-			$result = $this->connection->execute($this->getRawSql(), $this->values, $this->params);
-		}
-		catch(\Exception $e)
-		{
-			throw $e;
-		}
-
-		return $result;
 	}
 }

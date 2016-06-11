@@ -7,41 +7,45 @@ class Update extends Base
 
 	public function setData(array $data)
 	{
-		foreach($data as $key => $value)
-			$this->values[] = $value;
-
 		$this->data = $data;
 
 		return $this;
 	}
 
-	public function getRawSql()
+	/**
+	 * Prepare and bind values orderly
+	 * @param boolean bind
+	 */
+	protected function prepareSql($bind = true)
 	{
 		$table = implode(', ', $this->tables);
 		
-		$wheres = count($this->wheres) > 0 ? 'WHERE '.implode('', $this->wheres) : '';
-
 		$datas = array();
 
 		foreach($this->data as $key => $value)
 			$datas[] = $key.' = ?';
 
-		$sql = 'UPDATE '.$table.' SET '.implode(', ', $datas).' '.$wheres;
+		$datas = count($this->data) ? 'SET ' . implode(', ', $this->prepareData($bind)) : '';
+
+		$wheres = count($this->wheres) ? 'WHERE ' . implode(', ', $this->prepareWhere($bind)) : '';
+
+		$sql = 'UPDATE '.$table.' '.$datas.' '.$wheres;
 
 		return $sql;
 	}
 
-	public function execute()
+	protected function prepareData($bind = true)
 	{
-		try
+		$datas = array();
+
+		foreach($this->data as $key => $value)
 		{
-			$result = $this->connection->execute($this->getRawSql(), $this->values, $this->params);
-		}
-		catch(\Exception $e)
-		{
-			throw $e;
+			if($bind)
+				$this->values[] = $value;
+
+			$datas[] = $key.' = ?';
 		}
 
-		return $result;
+		return $datas;
 	}
 }

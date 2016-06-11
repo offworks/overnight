@@ -12,39 +12,34 @@ class Insert extends Base
 
 	public function setData(array $data)
 	{
-		foreach($data as $field => $value)
-		{
-			$this->fields[] = $field;
-			
-			$this->values[] = $value;
-		}
+		$this->data = $data;
 
 		return $this;
 	}
 
-	public function getRawSql()
+	protected function prepareFields($bind = true)
+	{
+		$fields = array();
+
+		foreach($this->data as $key => $value)
+		{
+			if($bind)
+				$this->values[] = $value;
+
+			$fields[] = $key;
+		}
+
+		return $fields;
+	}
+
+	public function prepareSql($bind = true)
 	{
 		$table = implode(', ', $this->tables);
 
-		$sql = 'INSERT INTO '.$table.' ('.implode(',', $this->fields).') VALUES ('.rtrim(str_repeat('?, ', count($this->fields)),', ').')';
+		$fields = $this->prepareFields($bind);
+
+		$sql = 'INSERT INTO '.$table.' ('.implode(', ', $fields).') VALUES ('.rtrim(str_repeat('?, ', count($fields)),', ').')';
 
 		return $sql;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function execute()
-	{
-		try
-		{
-			$result = $this->connection->execute($this->getRawSql(), $this->values, $this->params);
-		}
-		catch(\Exception $e)
-		{
-			throw $e;
-		}
-
-		return $result;
 	}
 }

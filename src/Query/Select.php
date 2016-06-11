@@ -68,55 +68,72 @@ class Select extends Base
 
 	protected function genericJoin($type, $table, $condition, array $values = array())
 	{
-		$this->joins[] = $type.' JOIN '.$table.' ON '.$condition;
-
-		foreach($values as $value)
-			$this->values[] = $value;
+		$this->joins[] = array($type.' JOIN '.$table.' ON '.$condition, $values);
 
 		return $this;
+	}
+
+	/**
+	 * Get list of joins
+	 * @return array
+	 */
+	protected function prepareJoin($bind = true)
+	{
+		$joins = array();
+
+		foreach($this->joins as $join)
+		{
+			if($bind)
+			{
+				foreach($join[1] as $value)
+					$this->values[] = $value;
+			}
+
+			$joins[] = $join[0];
+		}
+
+		return $joins;
 	}
 
 	public function limit($limit, $offset = null)
 	{
-		$this->limit = 'LIMIT '.(!$offset ? $limit : $offset.', '.$limit);
+		$this->limit = array((!$offset ? '?' : '?, ?'), (!$offset ? array($limit) : array($offset, $limit)));
 
 		return $this;
 	}
 
-	public function getRawSql()
+	/**
+	 * @return string
+	 */
+	public function prepareLimit($bind = true)
+	{
+		if($bind)
+		{
+			foreach($this->limit[1] as $value)
+				$this->values[] = $value;
+
+			$this->connection->setPdoAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		}
+
+		return $this->limit[0];
+	}
+
+	public function prepareSql($bind = true)
 	{
 		$selects = count($this->selects) == 0 ? '*' : implode(', ', $this->selects);
 
 		$tables = implode(', ', $this->tables);
 
-		$joins = implode(', ', $this->joins);
+		$joins = count($this->joins) > 0 ? implode(', ', $this->prepareJoin($bind)) : '';
 		
-		$wheres = count($this->wheres) > 0 ? 'WHERE '.implode('', $this->wheres) : '';
+		$wheres = count($this->wheres) > 0 ? 'WHERE '.implode('', $this->prepareWhere($bind)) : '';
 		
 		$orderBys = count($this->orderBys) > 0 ? 'ORDER BY '.implode(', ',$this->orderBys) : '';
 
-		$limit = $this->limit ? $this->limit : '';
-		
+		$limit = $this->limit ? 'LIMIT '.$this->prepareLimit($bind) : '';
+
 		$groupBys = count($this->groupBys) > 0 ? 'GROUP BY '.implode(', ', $groupBy) : '';
 
 		return 'SELECT '.$selects.' FROM '.$tables.' '.$joins.' '.$wheres.' '.$groupBys.' '.$orderBys.' '.$limit;
-	}
-
-	/**
-	 * Execute the query
-	 * @throws \Exception
-	 */
-	public function execute()
-	{
-		try
-		{
-			$result = $this->connection->execute($this->getRawSql(), $this->values, $this->params);
-		}
-		catch(\Exception $e)
-		{
-			throw $e;
-		}
-
-		return $result;
 	}
 }

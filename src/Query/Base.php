@@ -54,12 +54,54 @@ class Base
 	{
 		$prefix = count($this->wheres) > 0 ? ' '.$limiter.' ' : '';
 
-		$this->wheres[] = trim($condition);
-
-		foreach($values as $value)
-			$this->values[] = $value;
+		$this->wheres[] = array(trim($prefix.' '.$condition), $values);
 
 		return $this;
+	}
+
+	/**
+	 * Get list of condition and bind values
+	 * @return array
+	 */
+	protected function prepareWhere($bind = true)
+	{
+		$wheres = array();
+
+		foreach($this->wheres as $where)
+		{
+			if($bind)
+			{
+				foreach($where[1] as $value)
+					$this->values[] = $value;
+			}
+
+			$wheres[] = $where[0];
+		}
+
+		return $wheres;
+	}
+
+	public function getRawSql()
+	{
+		return $this->prepareSql(false);
+	}
+
+	/**
+	 * Execute the query
+	 * @throws \Exception
+	 */
+	public function execute()
+	{
+		try
+		{
+			$result = $this->connection->execute($this->prepareSql(), $this->values, $this->params);
+		}
+		catch(\Exception $e)
+		{
+			throw $e;
+		}
+
+		return $result;
 	}
 }
 
