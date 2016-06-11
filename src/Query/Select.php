@@ -61,6 +61,11 @@ class Select extends Base
 		return $this->genericJoin('LEFT', $table, $condition, $values);
 	}
 
+	public function rightJoin($table, $condition, array $values = array())
+	{
+		return $this->genericJoin('RIGHT', $table, $condition, $values);
+	}
+
 	protected function genericJoin($type, $table, $condition, array $values = array())
 	{
 		$this->joins[] = $type.' JOIN '.$table.' ON '.$condition;
