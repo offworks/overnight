@@ -4,7 +4,7 @@ An overnightly simple PHP-mysql query builder based on PDO.
 ### Installation
 #### Composer
 ```
-composer require offworks/overnight dev-master
+composer require offworks/overnight
 ```
 
 ### Create connection
@@ -42,7 +42,12 @@ $users = $overnight->from('user')
          ->leftJoin('membership', 'membership.user_id = user.user_id')
          ->execute()->all();
 ```
-
+Prepared join
+```
+$users = $overnight->from('book')
+        ->innerJoin('author', 'author.author_id = book.author_id AND author.is_alive = ?', array(1))
+        ->execute()->all();
+```
 
 #### Ordering
 ```
