@@ -10,6 +10,16 @@ class Result
 		$this->connection = $connection;
 	}
 
+	public function getStatement()
+	{
+		return $this->statement;
+	}
+
+	public function getConnection()
+	{
+		return $this->connection;
+	}
+
 	public function all()
 	{
 		return $this->statement->fetchAll(\PDO::FETCH_ASSOC);

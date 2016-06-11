@@ -38,7 +38,7 @@ class Insert extends Base
 	{
 		try
 		{
-			$result = $this->connection->execute($this->getRawSql(), $this->values, $this->params, 'insert');
+			$result = $this->connection->execute($this->getRawSql(), $this->values, $this->params);
 		}
 		catch(\Exception $e)
 		{

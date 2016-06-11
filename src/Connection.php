@@ -94,6 +94,20 @@ class Connection
 		return $update;
 	}
 
+	/**
+	 * Create delete query
+	 * @return \Overnight\Query\Delete
+	 */
+	public function delete($table = null)
+	{
+		$delete = new Query\Delete($this);
+
+		if($table)
+			$delete->table($table);
+
+		return $delete;
+	}
+
 	protected function createResult($connection, $statement)
 	{
 		return new Result($connection, $statement);
@@ -116,10 +130,7 @@ class Connection
 			throw new \Exception($error[2]);
 		}
 
-		if($type == 'select')
-			return new Query\Result($this, $statement);
-		else
-			return true;
+		return new Query\Result($this, $statement);
 	}
 
 	/**

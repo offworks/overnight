@@ -16,15 +16,7 @@ class Delete extends Base
 		
 		$wheres = count($this->wheres) > 0 ? 'WHERE '.implode('', $this->wheres) : '';
 
-		$datas = array();
-		
-		foreach($this->data as $key => $value)
-		{
-			$datas = $key.' = ?';
-			$this->values[] = $value;
-		}
-
-		$sql = 'DELETE FROM '.$table.' SET '.implode(', ', $datas).' '.$wheres;
+		$sql = 'DELETE FROM '.$table.' '.$wheres;
 
 		return $sql;
 	}
@@ -33,7 +25,7 @@ class Delete extends Base
 	{
 		try
 		{
-			$result = $this->connection->execute($this->getRawSql(), $this->values, 'delete');
+			$result = $this->connection->execute($this->getRawSql(), $this->values, $this->params);
 		}
 		catch(\Exception $e)
 		{

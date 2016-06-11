@@ -35,7 +35,7 @@ class Update extends Base
 	{
 		try
 		{
-			$result = $this->connection->execute($this->getRawSql(), $this->values, $this->params, 'update');
+			$result = $this->connection->execute($this->getRawSql(), $this->values, $this->params);
 		}
 		catch(\Exception $e)
 		{
