@@ -37,7 +37,7 @@ class Select extends Base
 		return $this;
 	}
 
-	public function orderBy($column, $order = null)
+	public function orderBy($column)
 	{
 		$this->orderBys[] = $column.($order ? ' '.strtoupper($order) : '');
 
@@ -51,9 +51,22 @@ class Select extends Base
 		return $this;
 	}
 
-	public function innerJoin($table, $cond)
+	public function innerJoin($table, $condition, array $values = array())
 	{
-		$this->joins[] = 'INNER JOIN '.$table.' ON '.$cond;
+		return $this->genericJoin('INNER', $table, $condition, $values);
+	}
+
+	public function leftJoin($table, $condition, array $values = array())
+	{
+		return $this->genericJoin('LEFT', $table, $condition, $values);
+	}
+
+	protected function genericJoin($type, $table, $condition, array $values = array())
+	{
+		$this->joins[] = $type.' JOIN '.$table.' ON '.$condition;
+
+		foreach($values as $value)
+			$this->values[] = $value;
 
 		return $this;
 	}
