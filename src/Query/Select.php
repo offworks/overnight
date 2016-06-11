@@ -37,9 +37,9 @@ class Select extends Base
 		return $this;
 	}
 
-	public function orderBy($column)
+	public function orderBy($order)
 	{
-		$this->orderBys[] = $column.($order ? ' '.strtoupper($order) : '');
+		$this->orderBys[] = $order;
 
 		return $this;
 	}
@@ -73,6 +73,29 @@ class Select extends Base
 		return $this;
 	}
 
+	public function limit($limit, $offset = null)
+	{
+		$this->limit = array((!$offset ? '?' : '?, ?'), (!$offset ? array($limit) : array($offset, $limit)));
+
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function prepareLimit($bind = true)
+	{
+		if($bind)
+		{
+			foreach($this->limit[1] as $value)
+				$this->values[] = $value;
+
+			$this->connection->setPdoAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+		}
+
+		return $this->limit[0];
+	}
+
 	/**
 	 * Get list of joins
 	 * @return array
@@ -93,29 +116,6 @@ class Select extends Base
 		}
 
 		return $joins;
-	}
-
-	public function limit($limit, $offset = null)
-	{
-		$this->limit = array((!$offset ? '?' : '?, ?'), (!$offset ? array($limit) : array($offset, $limit)));
-
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function prepareLimit($bind = true)
-	{
-		if($bind)
-		{
-			foreach($this->limit[1] as $value)
-				$this->values[] = $value;
-
-			$this->connection->setPdoAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-		}
-
-		return $this->limit[0];
 	}
 
 	public function prepareSql($bind = true)

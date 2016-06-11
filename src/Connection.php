@@ -36,7 +36,9 @@ class Connection
 
 	public static function create($host, $user, $pass, $db, array $classes = array())
 	{
-		$connection = new static(new \Pdo('mysql:host='.$host.';dbname='.$db, $user, $pass), $classes);
+		$pdo = new \Pdo('mysql:host='.$host.';dbname='.$db, $user, $pass, array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
+
+		$connection = new static($pdo, $classes);
 
 		return $connection;
 	}
