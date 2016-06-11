@@ -52,11 +52,6 @@ class Connection
 		return $this->pdo;
 	}
 
-	protected function createObject($type)
-	{
-		return $this->classes[$type];
-	}
-
 	/**
 	 * Create select query
 	 * @return \Overnight\Query\Select
