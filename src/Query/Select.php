@@ -46,7 +46,7 @@ class Select extends Base
 
 	public function groupBy($column)
 	{
-		$this->groupBy[] = is_array($column) ? implode(', ', $column) : $column;
+		$this->groupBys[] = $column;
 
 		return $this;
 	}
@@ -132,7 +132,7 @@ class Select extends Base
 
 		$limit = $this->limit ? 'LIMIT '.$this->prepareLimit($bind) : '';
 
-		$groupBys = count($this->groupBys) > 0 ? 'GROUP BY '.implode(', ', $groupBy) : '';
+		$groupBys = count($this->groupBys) > 0 ? 'GROUP BY '.implode(', ', $this->groupBys) : '';
 
 		return 'SELECT '.$selects.' FROM '.$tables.' '.$joins.' '.$wheres.' '.$groupBys.' '.$orderBys.' '.$limit;
 	}
