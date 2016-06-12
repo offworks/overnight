@@ -175,3 +175,6 @@ delete(string $table)
 where(string $condition, array $values = array())
 orWhere(string $condition, array $values = array())
 ```
+
+## License
+[MIT](LICENSE.md)
