@@ -75,6 +75,11 @@ class Select extends Base
 		return $this;
 	}
 
+	public function join($type, $table, $condition, array $values = array())
+	{
+		return $this->genericJoin($type, $table, $condition, $values);
+	}
+
 	public function limit($limit, $offset = null)
 	{
 		$this->limit = array(($offset === null ? '?' : '?, ?'), ($offset === null ? array($limit) : array($offset, $limit)));
