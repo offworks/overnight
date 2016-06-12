@@ -75,7 +75,7 @@ class Select extends Base
 
 	public function limit($limit, $offset = null)
 	{
-		$this->limit = array((!$offset ? '?' : '?, ?'), (!$offset ? array($limit) : array($offset, $limit)));
+		$this->limit = array(($offset === null ? '?' : '?, ?'), ($offset === null ? array($limit) : array($offset, $limit)));
 
 		return $this;
 	}
@@ -120,20 +120,23 @@ class Select extends Base
 
 	public function prepareSql($bind = true)
 	{
-		$selects = count($this->selects) == 0 ? '*' : implode(', ', $this->selects);
+		$sql = 'SELECT ' . (count($this->selects) == 0 ? '*' : implode(', ', $this->selects)).' FROM ' . implode(', ', $this->tables);
 
-		$tables = implode(', ', $this->tables);
+		if(count($this->joins) > 0)
+			$sql .= ' ' . implode(' ', $this->prepareJoin($bind));
 
-		$joins = count($this->joins) > 0 ? implode(', ', $this->prepareJoin($bind)) : '';
+		if(count($this->wheres) > 0)
+			$sql .= ' WHERE '.implode('', $this->prepareWhere($bind));
+
+		if(count($this->groupBys) > 0)
+			$sql .= ' GROUP BY '.implode(', ', $this->groupBys);
 		
-		$wheres = count($this->wheres) > 0 ? 'WHERE '.implode('', $this->prepareWhere($bind)) : '';
-		
-		$orderBys = count($this->orderBys) > 0 ? 'ORDER BY '.implode(', ',$this->orderBys) : '';
+		if(count($this->orderBys) > 0)
+			$sql .= ' ORDER BY '.implode(', ',$this->orderBys);
 
-		$limit = $this->limit ? 'LIMIT '.$this->prepareLimit($bind) : '';
+		if($this->limit)
+			$sql .= ' LIMIT '.$this->prepareLimit($bind);
 
-		$groupBys = count($this->groupBys) > 0 ? 'GROUP BY '.implode(', ', $this->groupBys) : '';
-
-		return 'SELECT '.$selects.' FROM '.$tables.' '.$joins.' '.$wheres.' '.$groupBys.' '.$orderBys.' '.$limit;
+		return $sql;
 	}
 }

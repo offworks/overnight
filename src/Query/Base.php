@@ -54,7 +54,7 @@ class Base
 	{
 		$prefix = count($this->wheres) > 0 ? ' '.$limiter.' ' : '';
 
-		$this->wheres[] = array(trim($prefix.' '.$condition), $values);
+		$this->wheres[] = array($prefix.trim($condition), $values);
 
 		return $this;
 	}
@@ -83,7 +83,7 @@ class Base
 
 	public function getRawSql()
 	{
-		return $this->prepareSql(false);
+		return trim($this->prepareSql(false));
 	}
 
 	/**
