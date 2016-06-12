@@ -41,14 +41,14 @@ $user = $db->from('user')
 Multiple wheres
 ```
 $tickets = $db->from('ticket')
-           ->where('available = ?', array(1))
-           ->where('expiry_date < ?', '2020-10-10')
+           ->where('available = ? AND used = ?', array(1, 0))
+           ->where('expiry_date < ?', array('2020-10-10'))
            ->andWhere('seat_type = ?', array('single'))
            ->orWhere('master_ticket = ?', array(1))
            ->execute();
 
-// will produce something like
-SELECT * FROM ticket WHERE available = 1 AND expiry_date < '2020-10-10' AND seat_type = 'single'
+// will execute something like
+SELECT * FROM ticket WHERE available = 1 AND used = 0 AND expiry_date < '2020-10-10' AND seat_type = 'single'
 ```
 
 ##### INNER JOIN
@@ -63,7 +63,7 @@ $users = $db->from('user')
          ->leftJoin('membership', 'membership.user_id = user.user_id')
          ->execute()->all();
 ```
-Prepared join
+Parameterized join
 ```
 $users = $db->from('book')
         ->innerJoin('author', 'author.author_id = book.author_id AND author.is_alive = ?', array(1))
@@ -115,9 +115,10 @@ $userId = $db->insert('user')->values($values)->execute()->id();
 
 ### UPDATE
 ```
-$db->update('book')->where('book_id = ?', array($bookId))
- ->set(array('title' => 'the lost marble - first edition'))
- ->execute();
+$db->update('book')
+->where('book_id = ?', array($bookId))
+->set(array('title' => 'the lost marble - first edition'))
+->execute();
 ```
 
 ### DELETE
