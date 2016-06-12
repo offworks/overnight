@@ -6,10 +6,18 @@ An overnightly simple PHP-mysql query builder based on PDO.
 ```
 composer require offworks/overnight
 ```
+#### Git clone
+```
+git clone https://github.com/offworks/overnight
+```
+then, require the autoload from the location
+```
+require_once __DIR__.'/path/to/overnight/src/autoload.php';
+```
 
 ### Create connection
 ```
-$overnight = \Overnight\Connection::create('localhost', 'rut', 'pux', 'superdb');
+$overnight = \Overnight\Connection::create('localhost', 'user', 'password', 'dbname');
 ```
 
 ### Querying
