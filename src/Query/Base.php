@@ -92,7 +92,7 @@ abstract class Base
 	 * Alias to getRawSql()
 	 * @return string
 	 */
-	public function sql()
+	public function getSql()
 	{
 		return $this->getRawSql();
 	}
