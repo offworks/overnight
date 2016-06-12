@@ -14,7 +14,7 @@ class Delete extends Base
 	{
 		$table = implode(', ', $this->tables);
 		
-		$wheres = count($this->wheres) > 0 ? 'WHERE  '.implode('', $this->prepareWhere($bind)) : '';
+		$wheres = count($this->wheres) > 0 ? 'WHERE '.implode('', $this->prepareWhere($bind)) : '';
 
 		$sql = 'DELETE FROM '.$table.' '.$wheres;
 

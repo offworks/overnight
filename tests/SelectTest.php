@@ -4,7 +4,9 @@ require_once 'FakePdo.php';
 class SelectTest extends PHPUnit_Framework_TestCase
 {
 	public function setUp()
-	{		
+	{
+		require_once __DIR__.'/../src/autoload.php';
+		
 		$this->connection = new \Overnight\Connection(new \FakePdo);
 	}
 

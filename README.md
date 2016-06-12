@@ -68,12 +68,21 @@ $query = $overnight->from('news')
 
 ### Inserting
 ```
+$overnight->insert('user')->values(array(
+    'name' => 'James',
+    'like' => 'Foo cake',
+    'birthdate' => '1977-05-09'
+  ))->execute();
+```
+or
+```
 $overnight->insert('user', array(
     'name' => 'James',
     'like' => 'Foo cake',
     'birthdate' => '1977-05-09'
   ))->execute();
 ```
+
 #### Last insert id
 ```
 $userId = $overnight->lastInsertId();
@@ -82,7 +91,7 @@ $userId = $overnight->lastInsertId();
 ### Updating
 ```
 $overnight->update('book')->where('book_id = ?', array($bookId))
-          ->setData(array('title' => 'the lost marble - first edition'))
+          ->set(array('title' => 'the lost marble - first edition'))
           ->execute();
 ```
 

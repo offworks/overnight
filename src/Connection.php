@@ -99,7 +99,7 @@ class Connection
 	 * Create insert query
 	 * @return \Overnight\Query\Insert
 	 */
-	public function insert($table = null, array $data = array())
+	public function insert($table = null, array $values = array())
 	{
 		$class = $this->classes['insert'];
 
@@ -108,8 +108,8 @@ class Connection
 		if($table)
 			$insert->into($table);
 
-		if(count($data) > 0)
-			$insert->setData($data);
+		if(count($values) > 0)
+			$insert->values($values);
 
 		return $insert;
 	}

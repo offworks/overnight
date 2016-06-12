@@ -1,6 +1,6 @@
 {
 	"name": "offworks/overnight",
-	"description": "Yet another simple pdo based php-mysql query builder",
+	"description": "Yet another simple and consistent pdo based php-mysql query builder",
 	"license": "MIT",
 	"keywords": ["query builder", "PDO", "mysql", "php-mysql"],
 	"authors": [{

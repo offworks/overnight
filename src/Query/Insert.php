@@ -10,7 +10,7 @@ class Insert extends Base
 		return $this->table($table);
 	}
 
-	public function setData(array $data)
+	public function values(array $data)
 	{
 		$this->data = $data;
 

@@ -5,9 +5,12 @@ class Update extends Base
 {
 	protected $data = array();
 
-	public function setData(array $data)
+	public function set($key, $value = null)
 	{
-		$this->data = $data;
+		if(is_array($key))
+			$this->data = $key;
+		else
+			$this->data[$key] = $value;
 
 		return $this;
 	}
