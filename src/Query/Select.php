@@ -118,7 +118,7 @@ class Select extends Base
 		return $joins;
 	}
 
-	public function prepareSql($bind = true)
+	protected function prepareSql($bind = true)
 	{
 		$sql = 'SELECT ' . (count($this->selects) == 0 ? '*' : implode(', ', $this->selects)).' FROM ' . implode(', ', $this->tables);
 
@@ -130,7 +130,7 @@ class Select extends Base
 
 		if(count($this->groupBys) > 0)
 			$sql .= ' GROUP BY '.implode(', ', $this->groupBys);
-		
+
 		if(count($this->orderBys) > 0)
 			$sql .= ' ORDER BY '.implode(', ',$this->orderBys);
 

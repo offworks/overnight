@@ -3,14 +3,7 @@ namespace Overnight\Query;
 
 class Delete extends Base
 {
-	protected $data = array();
-
-	public function setData(array $data)
-	{
-		$this->data = $data;
-	}
-
-	public function prepareSql($bind = true)
+	protected function prepareSql($bind = true)
 	{
 		$table = implode(', ', $this->tables);
 		

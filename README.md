@@ -63,7 +63,7 @@ $query = $overnight->from('news')
         ->innerJoin('editor', 'news.editor_id = editor.editor_id')
         ->where('DATE(published_at) = ?', array(date('Y-m-d H:i:s')))
         ->orderBy('published_at DESC')
-        ->getRawSql();
+        ->sql();
 ```
 
 ### Inserting

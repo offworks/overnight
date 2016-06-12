@@ -1,7 +1,7 @@
 <?php
 namespace Overnight\Query;
 
-class Base
+abstract class Base
 {
 	protected $tables = array();
 
@@ -81,9 +81,20 @@ class Base
 		return $wheres;
 	}
 
+	abstract protected function prepareSql();
+
 	public function getRawSql()
 	{
 		return trim($this->prepareSql(false));
+	}
+
+	/**
+	 * Alias to getRawSql()
+	 * @return string
+	 */
+	public function sql()
+	{
+		return $this->getRawSql();
 	}
 
 	/**

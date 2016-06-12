@@ -32,7 +32,7 @@ class Insert extends Base
 		return $fields;
 	}
 
-	public function prepareSql($bind = true)
+	protected function prepareSql($bind = true)
 	{
 		$table = implode(', ', $this->tables);
 
