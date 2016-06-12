@@ -13,6 +13,8 @@ class Select extends Base
 
 	protected $groupBys = array();
 
+	protected $havings = array();
+
 	protected $limit = null;
 
 	/**
@@ -80,10 +82,55 @@ class Select extends Base
 		return $this;
 	}
 
+	public function having($condition, array $values = array())
+	{
+		return $this->genericHaving($condition, $values);
+	}
+
+	public function andHaving()
+	{
+		return $this->genericHaving($condition, $values, 'AND');
+	}
+
+	public function orHaving()
+	{
+		return $this->genericHaving($condition, $values, 'OR');
+	}
+
+	protected function genericHaving($condition, array $values = array(), $limiter = 'AND')
+	{
+		$prefix = count($this->havings) > 0 ? ' '.$limiter.' ' : '';
+
+		$this->havings[] = array($prefix.trim($condition), $values);
+
+		return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function prepareHaving($bind = true)
+	{
+		$havings = array();
+
+		foreach($this->havings as $having)
+		{
+			if($bind)
+			{
+				foreach($having[1] as $value)
+					$this->values[] = $value;
+			}
+
+			$havings[] = $having[0];
+		}
+
+		return $havings;
+	}
+
 	/**
 	 * @return string
 	 */
-	public function prepareLimit($bind = true)
+	protected function prepareLimit($bind = true)
 	{
 		if($bind)
 		{
@@ -130,6 +177,9 @@ class Select extends Base
 
 		if(count($this->groupBys) > 0)
 			$sql .= ' GROUP BY '.implode(', ', $this->groupBys);
+
+		if(count($this->havings) > 0)
+			$sql .= ' HAVING '.implode('', $this->prepareHaving($bind));
 
 		if(count($this->orderBys) > 0)
 			$sql .= ' ORDER BY '.implode(', ',$this->orderBys);

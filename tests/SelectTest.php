@@ -81,4 +81,17 @@ class SelectTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals('SELECT * FROM foo_table LEFT JOIN bar_table ON foo_table.foo_column = bar_table.qux_column WHERE foo_column = ? GROUP BY foo_column ORDER BY baz_column LIMIT ?, ?', $query->getRawSql());
 	}
+
+	public function testHaving()
+	{
+		$query = $this->connection->from('foo_table')
+		->groupBy('foo_column')
+		->where('foo_column = ?', array('bar'))
+		->limit(1, 0)
+		->orderBy('baz_column')
+		->leftJoin('bar_table', 'foo_table.foo_column = bar_table.qux_column')
+		->having('bar_column = ?', array('baz'));
+
+		$this->assertEquals('SELECT * FROM foo_table LEFT JOIN bar_table ON foo_table.foo_column = bar_table.qux_column WHERE foo_column = ? GROUP BY foo_column HAVING bar_column = ? ORDER BY baz_column LIMIT ?, ?', $query->getRawSql());
+	}
 }
