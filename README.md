@@ -126,12 +126,14 @@ $overnight->delete('author')
 ### APIs
 #### General
 ```
-execute()
-  all()
-  first()
+$query->execute()
   getStatement()
-connection->lastInsertId()
+$query->getSql()
+$connection->lastInsertId()
+$connection->execute(string $sql, array $values, array $params))
+$connection->getPdo()
 ```
+
 #### Select
 ```
 from(string $table) or table(string $table)
@@ -145,14 +147,15 @@ leftJoin(string $table, string $condition)
 rightJoin(string $table, string $condition)
 limit(int $limit, int $offset = null)
 having(string $condition, array $values = array())
-getSql()
+execute()->all()
+execute()->first()
 ```
 
 #### Insert
 ```
 insert(string $table, array $values = array())
 values(array $values)
-getSql()
+execute()->id()
 ```
 
 #### Update
@@ -160,11 +163,11 @@ getSql()
 update(string $table)
 set(array $data)
 where(string $condition, array $values = array())
-getSql()
+orWhere(string $condition, array $values = array())
 ```
 #### Delete
 ```
 delete(string $table)
 where(string $condition, array $values = array())
-getSql()
+orWhere(string $condition, array $values = array())
 ```
