@@ -1,12 +1,12 @@
 # Overnight
 An overnightly simple and consistent PHP-mysql query builder based on PDO.
 
-### Installation
-#### Composer
+## Installation
+##### Composer
 ```
 composer require offworks/overnight
 ```
-#### Git clone
+##### Git clone
 ```
 git clone https://github.com/offworks/overnight
 ```
@@ -15,13 +15,14 @@ then, require the autoload from the location
 require_once __DIR__.'/path/to/overnight/src/autoload.php';
 ```
 
-### Create connection
+## Usage
+#### Create connection
 ```
 $db = \Overnight\Connection::create('localhost', 'user', 'password', 'dbname');
 ```
 
-### Querying
-#### Simple query
+### SELECT
+##### WHERE
 Get an array of records
 ```
 $users = $db->table('user')
@@ -50,14 +51,13 @@ $tickets = $db->from('ticket')
 SELECT * FROM ticket WHERE available = 1 AND expiry_date < '2020-10-10' AND seat_type = 'single'
 ```
 
-#### Joining
-Inner Join
+##### INNER JOIN
 ```
 $books = $db->from('book')
          ->innerJoin('author', 'author.author_id = book.author_id')
          ->execute()->all();
 ```
-Left Join
+##### LEFT JOIN
 ```
 $users = $db->from('user')
          ->leftJoin('membership', 'membership.user_id = user.user_id')
@@ -70,7 +70,7 @@ $users = $db->from('book')
         ->execute()->all();
 ```
 
-#### Ordering
+##### ORDER BY
 ```
 $students = $db->from('student')
             ->where('is_alive = ?', array(1))
@@ -78,7 +78,7 @@ $students = $db->from('student')
             ->execute()->all();
 ```
 
-#### Get Raw Sql
+##### GET RAW SQL
 ```
 $sql = $db->from('news')
        ->innerJoin('editor', 'news.editor_id = editor.editor_id')
@@ -87,7 +87,7 @@ $sql = $db->from('news')
        ->getSql();
 ```
 
-### Inserting
+### INSERT
 ```
 $db->insert('user')->values(array(
     'name' => 'James',
@@ -108,22 +108,26 @@ $db->insert('user', array(
 ```
 $userId = $db->lastInsertId();
 ```
+or
+```
+$userId = $db->insert('user')->values($values)->execute()->id();
+```
 
-### Updating
+### UPDATE
 ```
 $db->update('book')->where('book_id = ?', array($bookId))
  ->set(array('title' => 'the lost marble - first edition'))
  ->execute();
 ```
 
-### Deleting
+### DELETE
 ```
 $db->delete('author')
 ->where('author_id = ?', array($authorId))
 ->execute();
 ```
 
-### APIs
+## APIs
 #### General
 ```
 $query->execute()
