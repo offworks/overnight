@@ -1,5 +1,5 @@
 # Overnight
-An overnightly simple PHP-mysql query builder based on PDO.
+An overnightly simple and consistent PHP-mysql query builder based on PDO.
 
 ### Installation
 #### Composer
@@ -80,11 +80,11 @@ $students = $overnight->from('student')
 
 #### Get Raw Sql
 ```
-$query = $overnight->from('news')
+$sql = $overnight->from('news')
         ->innerJoin('editor', 'news.editor_id = editor.editor_id')
         ->where('DATE(published_at) = ?', array(date('Y-m-d H:i:s')))
         ->orderBy('published_at DESC')
-        ->sql();
+        ->getSql();
 ```
 
 ### Inserting
@@ -121,4 +121,50 @@ $overnight->update('book')->where('book_id = ?', array($bookId))
 $overnight->delete('author')
           ->where('author_id = ?', array($authorId))
           ->execute();
+```
+
+### APIs
+#### General
+```
+execute()
+  all()
+  first()
+  getStatement()
+connection->lastInsertId()
+```
+#### Select
+```
+from(string $table) or table(string $table)
+select(string|array $columns)
+where(string $condition, array $values = array())
+orWhere(string $condition, array $values = array())
+orderBy(string $orderBy)
+groupBy(string $groupBy)
+innerJoin(string $table, string $condition)
+leftJoin(string $table, string $condition)
+rightJoin(string $table, string $condition)
+limit(int $limit, int $offset = null)
+having(string $condition, array $values = array())
+getSql()
+```
+
+#### Insert
+```
+insert(string $table, array $values = array())
+values(array $values)
+getSql()
+```
+
+#### Update
+```
+update(string $table)
+set(array $data)
+where(string $condition, array $values = array())
+getSql()
+```
+#### Delete
+```
+delete(string $table)
+where(string $condition, array $values = array())
+getSql()
 ```
