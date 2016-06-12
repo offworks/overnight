@@ -172,6 +172,15 @@ class Connection
 	 * Get last insert id
 	 * @return int
 	 */
+	public function getLastInsertId()
+	{
+		return $this->pdo->lastInsertId();
+	}
+
+	/**
+	 * Alias to getLastInsertId()
+	 * @return int
+	 */
 	public function lastInsertId()
 	{
 		return $this->pdo->lastInsertId();

@@ -20,6 +20,11 @@ class Result
 		return $this->connection;
 	}
 
+	public function id()
+	{
+		return $this->connection->getLastInsertId();
+	}
+
 	public function all()
 	{
 		return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
