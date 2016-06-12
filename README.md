@@ -37,6 +37,19 @@ $user = $overnight->from('user')
 ```
 *p/s : from() is an alias of table()*
 
+Multiple wheres
+```
+$tickets = $overnight->from('ticket')
+           ->where('available = ?', array(1))
+           ->where('expiry_date < ?', '2020-10-10')
+           ->andWhere('seat_type = ?', array('single'))
+           ->orWhere('master_ticket = ?', array(1))
+           ->execute();
+
+// will produce something like
+SELECT * FROM ticket WHERE available = 1 AND expiry_date < '2020-10-10' AND seat_type = 'single'
+```
+
 #### Joining
 Inner Join
 ```
