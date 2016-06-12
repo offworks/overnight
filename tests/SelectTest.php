@@ -13,9 +13,11 @@ class SelectTest extends PHPUnit_Framework_TestCase
 	public function testSelect()
 	{
 		$query = $this->connection
-		->from('foo_table');
+		->from('foo_table')
+		->select('foo_column, bar_column')
+		->select(array('baz_column'));
 
-		$this->assertEquals('SELECT * FROM foo_table', $query->getRawSql());
+		$this->assertEquals('SELECT foo_column, bar_column, baz_column FROM foo_table', $query->getRawSql());
 	}
 
 	public function testWhere()

@@ -23,7 +23,7 @@ class Select extends Base
 	 */
 	public function from($table)
 	{
-		$this->tables[] = is_array($table) ? implode(',', $table) : $table;
+		$this->tables[] = is_array($table) ? implode(', ', $table) : $table;
 
 		return $this;
 	}
