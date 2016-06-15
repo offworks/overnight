@@ -18,10 +18,10 @@ class UpdateTest extends PHPUnit_Framework_TestCase
 			'baz_column' => 'qux'
 			));
 
-		$this->assertEquals('UPDATE foo_table SET bar_column = ?, baz_column = ? WHERE foo_column = ?', $query->getRawSql());
+		$this->assertEquals('UPDATE foo_table SET bar_column = ?, baz_column = ? WHERE (foo_column = ?)', $query->getRawSql());
 
 		$query->set('qux_column', 'tux');
 
-		$this->assertEquals('UPDATE foo_table SET bar_column = ?, baz_column = ?, qux_column = ? WHERE foo_column = ?', $query->getRawSql());
+		$this->assertEquals('UPDATE foo_table SET bar_column = ?, baz_column = ?, qux_column = ? WHERE (foo_column = ?)', $query->getRawSql());
 	}
 }

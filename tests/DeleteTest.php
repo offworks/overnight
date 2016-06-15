@@ -13,6 +13,6 @@ class DeleteTest extends PHPUnit_Framework_TestCase
 		$query = $this->connection->delete('foo_table')
 		->where('foo_column = ?', array('bar'));
 
-		$this->assertEquals('DELETE FROM foo_table WHERE foo_column = ?', $query->getRawSql());
+		$this->assertEquals('DELETE FROM foo_table WHERE (foo_column = ?)', $query->getRawSql());
 	}
 }

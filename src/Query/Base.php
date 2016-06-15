@@ -54,7 +54,7 @@ abstract class Base
 	{
 		$prefix = count($this->wheres) > 0 ? ' '.$limiter.' ' : '';
 
-		$this->wheres[] = array($prefix.trim($condition), $values);
+		$this->wheres[] = array($prefix . '(' . trim($condition) .')', $values);
 
 		return $this;
 	}
