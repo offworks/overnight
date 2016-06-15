@@ -53,24 +53,24 @@ class Select extends Base
 		return $this;
 	}
 
-	public function innerJoin($table, $condition, array $values = array())
+	public function innerJoin($condition, array $values = array())
 	{
-		return $this->genericJoin('INNER', $table, $condition, $values);
+		return $this->genericJoin('INNER', $condition, $values);
 	}
 
-	public function leftJoin($table, $condition, array $values = array())
+	public function leftJoin($condition, array $values = array())
 	{
-		return $this->genericJoin('LEFT', $table, $condition, $values);
+		return $this->genericJoin('LEFT', $condition, $values);
 	}
 
-	public function rightJoin($table, $condition, array $values = array())
+	public function rightJoin($condition, array $values = array())
 	{
-		return $this->genericJoin('RIGHT', $table, $condition, $values);
+		return $this->genericJoin('RIGHT', $condition, $values);
 	}
 
-	protected function genericJoin($type, $table, $condition, array $values = array())
+	protected function genericJoin($type, $condition, array $values = array())
 	{
-		$this->joins[] = array($type.' JOIN '.$table.' ON '.$condition, $values);
+		$this->joins[] = array($type.' JOIN '.$condition, $values);
 
 		return $this;
 	}
