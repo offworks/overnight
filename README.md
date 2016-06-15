@@ -54,19 +54,19 @@ SELECT * FROM ticket WHERE available = 1 AND used = 0 AND expiry_date < '2020-10
 ##### INNER JOIN
 ```
 $books = $db->from('book')
-         ->innerJoin('author', 'author.author_id = book.author_id')
+         ->innerJoin('author ON author.author_id = book.author_id')
          ->execute()->all();
 ```
 ##### LEFT JOIN
 ```
 $users = $db->from('user')
-         ->leftJoin('membership', 'membership.user_id = user.user_id')
+         ->leftJoin('membership ON membership.user_id = user.user_id')
          ->execute()->all();
 ```
 Parameterized join
 ```
 $users = $db->from('book')
-        ->innerJoin('author', 'author.author_id = book.author_id AND author.is_alive = ?', array(1))
+        ->innerJoin('author ON author.author_id = book.author_id AND author.is_alive = ?', array(1))
         ->execute()->all();
 ```
 
