@@ -31,7 +31,7 @@ class Update extends Base
 
         $datas = count($this->data) ? 'SET ' . implode(', ', $this->prepareData($bind)) : '';
 
-        $wheres = count($this->wheres) ? 'WHERE ' . implode(', ', $this->prepareWhere($bind)) : '';
+        $wheres = count($this->wheres) ? 'WHERE ' . implode('', $this->prepareWhere($bind)) : '';
 
         $sql = 'UPDATE ' . $table . ' ' . $datas . ' ' . $wheres;
 

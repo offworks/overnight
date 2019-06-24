@@ -99,6 +99,7 @@ abstract class Base
     /**
      * Execute the query
      * @throws \Exception
+     * @return Result
      */
     public function execute()
     {
