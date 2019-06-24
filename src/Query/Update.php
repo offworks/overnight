@@ -1,54 +1,54 @@
 <?php
+
 namespace Overnight\Query;
 
 class Update extends Base
 {
-	protected $data = array();
+    protected $data = array();
 
-	public function set($key, $value = null)
-	{
-		if(is_array($key))
-			$this->data = $key;
-		else
-			$this->data[$key] = $value;
+    public function set($key, $value = null)
+    {
+        if (is_array($key))
+            $this->data = $key;
+        else
+            $this->data[$key] = $value;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Prepare and bind values orderly
-	 * @param boolean bind
-	 */
-	protected function prepareSql($bind = true)
-	{
-		$table = implode(', ', $this->tables);
-		
-		$datas = array();
+    /**
+     * Prepare and bind values orderly
+     * @param boolean bind
+     */
+    protected function prepareSql($bind = true)
+    {
+        $table = implode(', ', $this->tables);
 
-		foreach($this->data as $key => $value)
-			$datas[] = $key.' = ?';
+        $datas = array();
 
-		$datas = count($this->data) ? 'SET ' . implode(', ', $this->prepareData($bind)) : '';
+        foreach ($this->data as $key => $value)
+            $datas[] = $key . ' = ?';
 
-		$wheres = count($this->wheres) ? 'WHERE ' . implode(', ', $this->prepareWhere($bind)) : '';
+        $datas = count($this->data) ? 'SET ' . implode(', ', $this->prepareData($bind)) : '';
 
-		$sql = 'UPDATE '.$table.' '.$datas.' '.$wheres;
+        $wheres = count($this->wheres) ? 'WHERE ' . implode(', ', $this->prepareWhere($bind)) : '';
 
-		return $sql;
-	}
+        $sql = 'UPDATE ' . $table . ' ' . $datas . ' ' . $wheres;
 
-	protected function prepareData($bind = true)
-	{
-		$datas = array();
+        return $sql;
+    }
 
-		foreach($this->data as $key => $value)
-		{
-			if($bind)
-				$this->values[] = $value;
+    protected function prepareData($bind = true)
+    {
+        $datas = array();
 
-			$datas[] = $key.' = ?';
-		}
+        foreach ($this->data as $key => $value) {
+            if ($bind)
+                $this->values[] = $value;
 
-		return $datas;
-	}
+            $datas[] = $key . ' = ?';
+        }
+
+        return $datas;
+    }
 }

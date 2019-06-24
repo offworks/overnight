@@ -1,45 +1,45 @@
 <?php
+
 namespace Overnight\Query;
 
 class Insert extends Base
 {
-	protected $fields = array();
+    protected $fields = array();
 
-	public function into($table)
-	{
-		return $this->table($table);
-	}
+    public function into($table)
+    {
+        return $this->table($table);
+    }
 
-	public function values(array $data)
-	{
-		$this->data = $data;
+    public function values(array $data)
+    {
+        $this->data = $data;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	protected function prepareFields($bind = true)
-	{
-		$fields = array();
+    protected function prepareFields($bind = true)
+    {
+        $fields = array();
 
-		foreach($this->data as $key => $value)
-		{
-			if($bind)
-				$this->values[] = $value;
+        foreach ($this->data as $key => $value) {
+            if ($bind)
+                $this->values[] = $value;
 
-			$fields[] = $key;
-		}
+            $fields[] = $key;
+        }
 
-		return $fields;
-	}
+        return $fields;
+    }
 
-	protected function prepareSql($bind = true)
-	{
-		$table = implode(', ', $this->tables);
+    protected function prepareSql($bind = true)
+    {
+        $table = implode(', ', $this->tables);
 
-		$fields = $this->prepareFields($bind);
+        $fields = $this->prepareFields($bind);
 
-		$sql = 'INSERT INTO '.$table.' ('.implode(', ', $fields).') VALUES ('.rtrim(str_repeat('?, ', count($fields)),', ').')';
+        $sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $fields) . ') VALUES (' . rtrim(str_repeat('?, ', count($fields)), ', ') . ')';
 
-		return $sql;
-	}
+        return $sql;
+    }
 }
